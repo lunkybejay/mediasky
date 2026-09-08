@@ -1,28 +1,20 @@
-# shoppingsnx (mediasky)
+# Payments, Auth, and Admin
 
-This repository contains a demo scaffold for the shoppingsnx marketplace integrated into MEDIA sky. It is a Next.js + Prisma (SQLite) starter meant for local development and later deployment to Vercel + Postgres.
+This update adds:
 
-Quick start (local)
+- Admin login (simple credentials using ADMIN_EMAIL & ADMIN_PASSWORD) — /admin/login and API /api/admin/login
+- Admin products UI: /admin/products to create and list products
+- Checkout API using Stripe (placeholder): POST /api/checkout { productId } -> returns session URL
+- JWT cookie-based admin session (httpOnly cookie ms_token)
+- .env.example with required vars
 
-1. Install dependencies
-   npm install
+IMPORTANT
+- Do NOT store real card numbers or secrets in the repo or chat. Use Stripe API keys and set them in Vercel/Netlify env variables.
+- The admin auth here is a simple credentials check for demo only. For production, replace with a proper auth provider (NextAuth, OAuth, or Prisma with hashed passwords).
 
-2. Generate Prisma client and push schema
-   npx prisma generate
-   DATABASE_URL="file:./dev.db" npx prisma db push
-
-3. Seed sample data
-   npm run seed
-
-4. Start dev server
-   npm run dev
-
-Environment
-- DATABASE_URL - defaults to SQLite file: file:./dev.db
-- NEXT_PUBLIC_SITE_URL - set to http://localhost:3000 for local dev, or to your Vercel URL when deployed
-
-Payments & Production
-- Configure Stripe (STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY) and your Mobile Money provider keys as environment variables on Vercel; never store card numbers in the repo.
-
-Notes
-- This is a scaffold: admin auth, production readiness (caching, rate-limits, image CDN), and payment flows are intentionally placeholders. I can continue to implement those next (auth, Stripe checkout, MoMo integration, one-click cross-posting to socials) if you want.
+Next steps you can ask me to implement now:
+- NextAuth integration with Prisma adapter (full auth, secure passwords)
+- Wholesaler registration & approvals with email verification
+- MoMo / Mobile Money integration via a provider (Flutterwave, Africa's Talking)
+- Media uploads (Cloudinary or Supabase Storage)
+- One-click multi-platform social publish integration (Buffer, Meta, X/Twitter)
