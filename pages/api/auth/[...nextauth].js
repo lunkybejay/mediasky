@@ -15,36 +15,45 @@ export default NextAuth({
       },
       async authorize(credentials) {
         const { email, password } = credentials || {}
-        // First, allow ADMIN_EMAIL / ADMIN_PASSWORD from env for quick admin
+        if (!email || !password) return null
+        
+        // Allow demo admin via env vars
         if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
           if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-            // create or find user in db
             let user = await prisma.user.findUnique({ where: { email: process.env.ADMIN_EMAIL } })
             if (!user) {
-              user = await prisma.user.create({ data: { email: process.env.ADMIN_EMAIL, name: 'Admin' } })
+              user = await prisma.user.create({
+                data: { email: process.env.ADMIN_EMAIL, name: 'Admin' }
+              })
             }
             return { id: user.id, email: user.email, name: user.name }
           }
         }
-        // Otherwise check users table (passwords should be hashed in production)
+        
+        // Check database users (implement bcrypt password hashing in production)
         const user = await prisma.user.findUnique({ where: { email } })
-        if (!user) return null
-        // In this scaffold we don't store passwords; in production, store hashed password and verify
-        // For demo, accept if user exists
-        return { id: user.id, email: user.email, name: user.name }
+        if (user) {
+          // TODO: Implement bcryptjs.compare(password, user.passwordHash) for production
+          return { id: user.id, email: user.email, name: user.name }
+        }
+        
+        return null
       }
     })
   ],
   session: { strategy: 'jwt' },
-  secret: process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET || 'dev-secret',
+  secret: process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET || 'dev-secret-change-in-production',
   callbacks: {
-    async jwt({ token, user }){
+    async jwt({ token, user }) {
       if (user) token.id = user.id
       return token
     },
-    async session({ session, token }){
+    async session({ session, token }) {
       if (token) session.user.id = token.id
       return session
     }
+  },
+  pages: {
+    signIn: '/admin/login'
   }
 })

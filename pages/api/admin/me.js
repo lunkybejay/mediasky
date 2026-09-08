@@ -1,12 +1,20 @@
-const { verifyToken } = require('../../../lib/auth')
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '../auth/[...nextauth]'
 
-export default function handler(req,res){
-  const cookie = req.headers.cookie
-  if (!cookie) return res.status(401).json({ message: 'No cookie' })
-  const match = cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ms_token='))
-  if (!match) return res.status(401).json({ message: 'No token' })
-  const token = match.split('=')[1]
-  const payload = verifyToken(token)
-  if (!payload) return res.status(401).json({ message: 'Invalid token' })
-  return res.status(200).json({ user: payload })
+export default async function handler(req, res) {
+  if (req.method !== 'GET') return res.status(405).end()
+  
+  try {
+    const session = await getServerSession(req, res, authOptions)
+    if (!session) return res.status(401).json({ message: 'Not authenticated' })
+    
+    return res.status(200).json({
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.name
+    })
+  } catch (error) {
+    console.error('Error fetching user:', error)
+    return res.status(500).json({ message: 'Failed to fetch user' })
+  }
 }
