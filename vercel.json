@@ -1,0 +1,11 @@
+{
+  "env": {
+    "NEXTAUTH_URL": "@next_public_site_url",
+    "NEXTAUTH_SECRET": "@nextauth_secret",
+    "DATABASE_URL": "@database_url",
+    "JWT_SECRET": "@jwt_secret"
+  },
+  "buildCommand": "npm run build",
+  "installCommand": "npm install && npx prisma generate && npx prisma db push",
+  "outputDirectory": ".next"
+}

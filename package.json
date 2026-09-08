@@ -1,6 +1,6 @@
 {
   "name": "mediasky-shoppingsnx",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,6 +8,7 @@
     "start": "next start",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
+    "prisma:migrate": "prisma migrate dev",
     "seed": "node prisma/seed.js"
   },
   "dependencies": {

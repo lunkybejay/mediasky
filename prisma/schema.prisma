@@ -3,13 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id            String   @id @default(cuid())
-  name          String? 
+  name          String?
   email         String?  @unique
   emailVerified DateTime?
   image         String?
@@ -63,6 +63,7 @@ model Product {
   category    String
   image       String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Wholesaler {
@@ -71,6 +72,7 @@ model Wholesaler {
   phone String
   email String?
   notes String?
+  createdAt DateTime @default(now())
 }
 
 model Order {
@@ -79,5 +81,8 @@ model Order {
   quantity Int
   wholesalerId Int?
   status String @default("pending")
+  paymentMethod String? // 'stripe', 'momo', etc.
+  paymentId String? // external payment provider ID
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
