@@ -1,0 +1,6 @@
+/*
+Styles file used across the demo. Keep minimal — you can replace with your existing CSS or Tailwind.
+*/
+html,body,#__next{height:100%}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;margin:0;background:#fff;color:#111}
+a{color:inherit;text-decoration:none}

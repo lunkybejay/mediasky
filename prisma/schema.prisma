@@ -1,0 +1,37 @@
+// Prisma schema for shoppingsnx demo
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  slug        String  @unique
+  description String?
+  price       Int
+  category    String
+  image       String?
+  createdAt   DateTime @default(now())
+}
+
+model Wholesaler {
+  id    Int @id @default(autoincrement())
+  name  String
+  phone String
+  email String?
+  notes String?
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+  productId Int
+  quantity Int
+  wholesalerId Int?
+  status String @default("pending")
+  createdAt DateTime @default(now())
+}
